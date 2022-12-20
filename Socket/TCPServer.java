@@ -45,9 +45,9 @@ public class TCPServer extends Thread{
                 }
                 else
                 {
-                    System.out.println("Send client ("+ port + "): ");
-                    DataInputStream din=new DataInputStream(System.in);
-                    String k=din.readLine();
+//                    System.out.println("Send client ("+ port + "): ");
+//                    DataInputStream din=new DataInputStream(System.in);
+                    String k="Received";
                     bw.write(k);
                     bw.newLine();
                     bw.flush();
@@ -60,17 +60,4 @@ public class TCPServer extends Thread{
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String arg[]) throws IOException {
-        ServerSocket s = new ServerSocket(3200);
-        do {
-            System.out.println("Waiting for a Client");
-            Socket ss= s.accept(); //synchronous
-            System.out.println("Talking to client");
-            System.out.println(ss.getPort());
-            TCPServer ts = new TCPServer(s, ss);
-            ts.start();
-        } while (true);
-    }
 }
-
