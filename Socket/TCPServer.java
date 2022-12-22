@@ -22,6 +22,7 @@ public class TCPServer extends Thread{
             t = new Thread(this);
             t.start();
         }
+
     }
 
     public void run() {
@@ -56,7 +57,7 @@ public class TCPServer extends Thread{
             while (true);
             bw.close();
             br.close();
-        } catch (IOException e) {
+        } catch (IOException e){
             throw new RuntimeException(e);
         }
     }
