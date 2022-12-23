@@ -51,9 +51,6 @@ public class TCPClient
                 receivedMessage = receivedMessage.replace("more","");
             }
         }
-        bw.write("done_select_folder");
-        bw.newLine();
-        bw.flush();
         des = receivedMessage.replace("choose", "");
         return des;
     }
@@ -73,7 +70,8 @@ public class TCPClient
             String receivedMessage = "";
             System.out.println("Talking to Server");
 
-            String path = listFolder(bw, br,"D:\\G++");
+            String path = listFolder(bw, br,"D:");
+            System.out.println("PATH: " + path);
             System.out.println("Watching directory for changes");
             // STEP1: Create a watch service
             WatchService watchService = FileSystems.getDefault().newWatchService();

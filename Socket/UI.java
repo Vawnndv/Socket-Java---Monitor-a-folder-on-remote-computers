@@ -39,6 +39,12 @@ public class UI extends JFrame implements ActionListener{
     }
 
     public void UI() {
+
+        JLabel label = new JLabel("Client Managent");
+        label.setForeground(Color.orange);
+        label.setFont(new Font("Gill Sans MT", Font.ITALIC, 20));
+        label.setAlignmentX(CENTER_ALIGNMENT);
+
         JPanel jPanel = new JPanel();
         JPanel jpOption = new JPanel();
         jpOption.setLayout(new GridLayout(2,1,50,10));
@@ -73,7 +79,7 @@ public class UI extends JFrame implements ActionListener{
 //                }
             }
         });
-
+        jPanel.add(label);
         jPanel.add(new JScrollPane(jList));
         jpOption.add(jTextField);
         jpOption.add(btnConnect);
@@ -84,6 +90,7 @@ public class UI extends JFrame implements ActionListener{
         this.setVisible(true);
         this.setSize(300, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Client Management");
     }
 
     public void runUI() throws IOException {
@@ -104,7 +111,6 @@ public class UI extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() ==  btnConnect) {
-            this.dispose();
             try {
                 GetFolder gf = new GetFolder(listClient.get(jList.getSelectedIndex()), s);
                 gf.process();

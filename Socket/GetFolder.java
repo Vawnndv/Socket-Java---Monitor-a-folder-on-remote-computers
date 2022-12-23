@@ -16,14 +16,19 @@ import javax.swing.event.ListSelectionListener;
 public class GetFolder extends JFrame implements ActionListener{
     Socket s;
     ServerSocket ss;
-    JButton btnMore,btnChoose, btnBack;
+    JButton btnMore,btnChoose;
     GetFolder (Socket s_, ServerSocket ss_) {
         s = s_;
         ss = ss_;
 
+        JLabel label = new JLabel("Choose Folder (Port: " + s.getPort() + ")");
+        label.setForeground(Color.orange);
+        label.setFont(new Font("Gill Sans MT", Font.ITALIC, 40));
+        label.setAlignmentX(CENTER_ALIGNMENT);
+
         JPanel jFolder = new JPanel();
         JPanel jpOption = new JPanel();
-        jpOption.setLayout(new GridLayout(4,1,50,10));
+        jpOption.setLayout(new GridLayout(3,1,50,10));
 
         JTextField jTextField = new JTextField();
         jTextField.setText("");
@@ -35,8 +40,6 @@ public class GetFolder extends JFrame implements ActionListener{
         btnChoose = new JButton("Choose");
         btnChoose.addActionListener(this);
 
-        btnBack = new JButton("Back");
-        btnBack.addActionListener(this);
 
         // Xu ly su kien
         j.addListSelectionListener(new ListSelectionListener() {
@@ -47,19 +50,19 @@ public class GetFolder extends JFrame implements ActionListener{
             }
         });
 
+        jFolder.add(label);
         jFolder.add(new JScrollPane(j));
         jpOption.add(jTextField);
         jpOption.add(btnMore);
         jpOption.add(btnChoose);
-        jpOption.add(btnBack);
         jFolder.add(jpOption);
         this.add(jFolder);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        this.setSize(300, 400);
+        this.setSize(700, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        this.setTitle("Folder Management");
     }
 
     private  JList j = new JList();
@@ -67,6 +70,7 @@ public class GetFolder extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnChoose) {
+            this.dispose();
             OutputStream os= null;
             try {
                 os = s.getOutputStream();
@@ -74,15 +78,8 @@ public class GetFolder extends JFrame implements ActionListener{
                 bw.write("choose" + listFolder.get(j.getSelectedIndex()));
                 bw.newLine();
                 bw.flush();
+                new WatchingFolder(s, listFolder.get(j.getSelectedIndex()));
 //                bw.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        if (e.getSource() == btnBack) {
-            this.dispose();
-            try {
-                new UI(ss).runUI();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
