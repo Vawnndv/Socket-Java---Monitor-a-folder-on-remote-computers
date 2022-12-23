@@ -8,11 +8,56 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.concurrent.TimeUnit;
 
 public class TCPClient
 {
-    public static void main(String arg[])
-    {
+    static String listFolder (BufferedWriter bw, BufferedReader br, String source) throws IOException, InterruptedException {
+        String des = source;
+        File node;
+        String receivedMessage = source;
+        while ((receivedMessage = br.readLine()) != null && receivedMessage.equals("testConnect")){
+            System.out.println(receivedMessage + " test");
+        };
+        while ((receivedMessage = br.readLine()) != null) {
+            if (receivedMessage.equals("getfolder"))
+                break;
+            System.out.println(receivedMessage + "get folder");
+        }
+        receivedMessage = source;
+        while(true) {
+            source = receivedMessage;
+            node = new File(source);
+//            System.out.println(receivedMessage);
+            if (node.isDirectory()) {
+                String[] subNote = node.list();
+
+                for (String filename : subNote) {
+                    if (!filename.contains(".")) {
+                        System.out.println(filename);
+                        bw.write(source + "\\" + filename);
+                        bw.newLine();
+                        bw.flush();
+                    }
+                }
+                bw.write("done");
+                bw.newLine();
+                bw.flush();
+            }
+            while((receivedMessage=br.readLine()) == null);
+            if (receivedMessage.contains("choose"))
+                break;
+            if (receivedMessage.contains("more")) {
+                receivedMessage = receivedMessage.replace("more","");
+            }
+        }
+        bw.write("done_select_folder");
+        bw.newLine();
+        bw.flush();
+        des = receivedMessage.replace("choose", "");
+        return des;
+    }
+    public static void main(String arg[]) throws InterruptedException {
         try
         {
             Socket s = new Socket("localhost",3200);
@@ -28,7 +73,7 @@ public class TCPClient
             String receivedMessage = "";
             System.out.println("Talking to Server");
 
-            String path = "D:\\testChange";
+            String path = listFolder(bw, br,"D:\\G++");
             System.out.println("Watching directory for changes");
             // STEP1: Create a watch service
             WatchService watchService = FileSystems.getDefault().newWatchService();

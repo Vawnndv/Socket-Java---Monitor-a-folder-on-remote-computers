@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UI {
+public class UI extends JFrame implements ActionListener{
     public List <Socket>listClient = new ArrayList<>();
     ServerSocket s;
+
+    JButton btnConnect;
 
     public UI(ServerSocket ss) throws IOException {
         s = ss;
@@ -37,10 +39,6 @@ public class UI {
     }
 
     public void UI() {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-
         JPanel jPanel = new JPanel();
         JPanel jpOption = new JPanel();
         jpOption.setLayout(new GridLayout(2,1,50,10));
@@ -49,15 +47,8 @@ public class UI {
         jTextField.setText("");
         jTextField.setColumns(10);
 
-        JButton btnConnect = new JButton("Connect");
-        btnConnect.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getSource() ==  btnConnect) {
-                    new GetFolder(listClient.get(jList.getSelectedIndex()));
-                }
-            }
-        });
+        btnConnect = new JButton("Connect");
+        btnConnect.addActionListener(this);
 
         // Xu ly su kien
         jList.addListSelectionListener(new ListSelectionListener() {
@@ -73,13 +64,13 @@ public class UI {
                 int port = listClient.get(jList.getSelectedIndex()).getPort();
                 jTextField.setText(String.valueOf(port));
 
-                try {
-
-                    TCPServer ts = new TCPServer(s, listClient.get(jList.getSelectedIndex()));
-                    ts.start();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+//                try {
+//
+//                    TCPServer ts = new TCPServer(s, listClient.get(jList.getSelectedIndex()));
+//                    ts.start();
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
             }
         });
 
@@ -87,11 +78,12 @@ public class UI {
         jpOption.add(jTextField);
         jpOption.add(btnConnect);
         jPanel.add(jpOption);
-        frame.add(jPanel);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setSize(300, 300);
+        this.add(jPanel);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        this.setSize(300, 300);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void runUI() throws IOException {
@@ -108,4 +100,17 @@ public class UI {
     }
 
     private  JList jList = new JList();
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() ==  btnConnect) {
+            this.dispose();
+            try {
+                GetFolder gf = new GetFolder(listClient.get(jList.getSelectedIndex()), s);
+                gf.process();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
 }
