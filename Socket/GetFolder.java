@@ -61,7 +61,7 @@ public class GetFolder extends JFrame implements ActionListener{
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setSize(700, 400);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Folder Management");
     }
 
@@ -70,16 +70,20 @@ public class GetFolder extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnChoose) {
-            this.dispose();
+
             OutputStream os= null;
             try {
                 os = s.getOutputStream();
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+                if (!listFolder.get(j.getSelectedIndex()).isEmpty()) {
+                    this.dispose();
+                }
+                System.out.println("choose" + listFolder.get(j.getSelectedIndex()));
                 bw.write("choose" + listFolder.get(j.getSelectedIndex()));
                 bw.newLine();
                 bw.flush();
                 new WatchingFolder(s, listFolder.get(j.getSelectedIndex()));
-//                bw.close();
+
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

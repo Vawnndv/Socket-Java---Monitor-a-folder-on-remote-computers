@@ -28,6 +28,10 @@ public class ListAction extends Thread {
                 listAction.add(receivedMessage);
                 System.out.println("Status received client ("+ s.getPort() + "): " + receivedMessage);
                 String finalReceivedMessage = receivedMessage;
+
+                bw.write("Received");
+                bw.newLine();
+                bw.flush();
                 SwingUtilities.invokeAndWait(new Runnable() {
                     public void run() {
                         String data[] = new String [listAction.size()];

@@ -12,12 +12,21 @@ import java.util.concurrent.TimeUnit;
 
 public class TCPClient
 {
+    static boolean isMoreFolder (String fileName) {
+        File node = new File(fileName);
+        if (node.isDirectory()) {
+            String[] subNote = node.list();
+            if (subNote.length != 0)
+                return true;
+        }
+        return false;
+    }
     static String listFolder (BufferedWriter bw, BufferedReader br, String source) throws IOException, InterruptedException {
         String des = source;
         File node;
         String receivedMessage = source;
         while ((receivedMessage = br.readLine()) != null && receivedMessage.equals("testConnect")){
-            System.out.println(receivedMessage + " test");
+//            System.out.println(receivedMessage + " test");
         };
         while ((receivedMessage = br.readLine()) != null) {
             if (receivedMessage.equals("getfolder"))
@@ -45,10 +54,15 @@ public class TCPClient
                 bw.flush();
             }
             while((receivedMessage=br.readLine()) == null);
-            if (receivedMessage.contains("choose"))
-                break;
+            if (receivedMessage.contains("choose")) {
+                    break;
+            }
+
             if (receivedMessage.contains("more")) {
                 receivedMessage = receivedMessage.replace("more","");
+                if (!isMoreFolder(receivedMessage) || receivedMessage.equals("")) {
+                    receivedMessage = source;
+                }
             }
         }
         des = receivedMessage.replace("choose", "");
@@ -86,11 +100,6 @@ public class TCPClient
             do
             {
 
-//                DataInputStream din=new DataInputStream(System.in);
-//                sentMessage=din.readLine();
-//                bw.write(sentMessage);
-//                bw.newLine();
-//                bw.flush();
 
                 for (WatchEvent<?> event : watchKey.pollEvents()) {
                     sentMessage = "";
@@ -130,11 +139,11 @@ public class TCPClient
                     bw.flush();
                     System.out.println("Sent Server: " + sentMessage);
 
+                    receivedMessage=br.readLine();
                     if (receivedMessage.equalsIgnoreCase("quit"))
-                        break;
+                        System.exit(0);
                     else
                     {
-                        receivedMessage=br.readLine();
                         System.out.println("Received : " + receivedMessage);
                     }
                 }
