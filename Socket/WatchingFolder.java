@@ -7,11 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class WatchingFolder extends JFrame implements ActionListener{
     Socket s;
@@ -69,6 +65,7 @@ public class WatchingFolder extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnDisconnet) {
+            this.dispose();
             OutputStream os = null;
             try {
                 os = s.getOutputStream();
@@ -77,9 +74,8 @@ public class WatchingFolder extends JFrame implements ActionListener{
                 bw.newLine();
                 bw.flush();
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+
             }
-            this.dispose();
         }
     }
 }

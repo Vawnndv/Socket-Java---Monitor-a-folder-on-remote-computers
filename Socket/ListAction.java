@@ -27,7 +27,6 @@ public class ListAction extends Thread {
                 receivedMessage = br.readLine();
                 listAction.add(receivedMessage);
                 System.out.println("Status received client ("+ s.getPort() + "): " + receivedMessage);
-                String finalReceivedMessage = receivedMessage;
 
                 bw.write("Received");
                 bw.newLine();

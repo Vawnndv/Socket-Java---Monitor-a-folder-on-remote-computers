@@ -70,13 +70,6 @@ public class UI extends JFrame implements ActionListener{
                 int port = listClient.get(jList.getSelectedIndex()).getPort();
                 jTextField.setText(String.valueOf(port));
 
-//                try {
-//
-//                    TCPServer ts = new TCPServer(s, listClient.get(jList.getSelectedIndex()));
-//                    ts.start();
-//                } catch (IOException ex) {
-//                    throw new RuntimeException(ex);
-//                }
             }
         });
         jPanel.add(label);

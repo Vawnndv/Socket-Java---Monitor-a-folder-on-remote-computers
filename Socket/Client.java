@@ -8,9 +8,8 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.concurrent.TimeUnit;
 
-public class TCPClient
+public class Client
 {
     static boolean isMoreFolder (String fileName) {
         File node = new File(fileName);
@@ -122,10 +121,6 @@ public class TCPClient
                     }
 
                     if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-//                        if (isFile)
-//                            System.out.println("A file has been deleted: " + fileName);
-//                        else if (isDirectory)
-//                            System.out.println("A folder has been deleted: " + fileName);
                         sentMessage = "A file/folder has been deleted: " + fileName;
                     }
                     if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
